@@ -269,7 +269,8 @@ class Test(FabengineTask):
 
     def __init__(self, *args, **kwargs):
         super(Test, self).__init__(*args, **kwargs)
-        self.set_default_args('without-sandbox')
+        # Not needed if using Nose 0.4
+        # self.set_default_args('without-sandbox')
 
     def run_fabengine(self, *args, **kwargs):
         cmd = ['nosetests', '--with-gae',
