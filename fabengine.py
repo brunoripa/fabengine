@@ -1,6 +1,7 @@
 import re
 import sys
 import os
+import json
 import tempfile
 import shutil
 from functools import partial
@@ -395,9 +396,9 @@ class ListVersions(AppCFGTask):
         kwargs['_capture'] = False if '_capture' not in kwargs else kwargs['_capture']
         versions = self.get_versions(*args, **kwargs)
         if print_var:
-            print versions
+            print json.dumps(versions, sort_keys=True, indent=2)
 
-        return
+        return versions
 
     def get_versions(self, *args, **kwargs):
         capture = kwargs.pop('_capture', True)
@@ -412,6 +413,7 @@ class ListVersions(AppCFGTask):
             return
 
         output = {}
+
         for m_match in self.mod_re.finditer(result.replace('\n','')):
             module = m_match.groupdict()['module']
             versions = []
