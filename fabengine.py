@@ -391,10 +391,13 @@ class ListVersions(AppCFGTask):
     ver_re = re.compile(r"(?P<version>[\w\d-]+)(, )?")
 
     def run_fabengine(self, *args, **kwargs):
-        if '_capture' not in kwargs:
-            kwargs['_capture'] = False
-            
-        print self.get_versions(*args, **kwargs)
+        print_var = "print" in args
+        kwargs['_capture'] = False if '_capture' not in kwargs else kwargs['_capture']
+        versions = self.get_versions(*args, **kwargs)
+        if print_var:
+            print versions
+
+        return
 
     def get_versions(self, *args, **kwargs):
         capture = kwargs.pop('_capture', True)
