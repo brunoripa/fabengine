@@ -207,7 +207,8 @@ class BundlePackages(FabengineTask):
 
             local("pip wheel --use-wheel -w %(dest)s %(cacheflag)s -f %(dest)s -r %(req)s " % {
                 'dest': package_dir,
- 				'cacheflag': '--download-cache temp' if new_pip_version() else None,
+ 				'cacheflag': '--download-cache temp' if new_pip_version() else
+"",
                 'req': requirements,
             })
 
