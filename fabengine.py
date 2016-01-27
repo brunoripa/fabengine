@@ -15,6 +15,17 @@ __all__ = ['bundle_packages', 'dev_appserver','test','show_config',
     'update_dos', 'update_cron', 'vacuum_indexes', 'update_dispatch',
     'delete_version', 'list_versions']
 
+def new_pip_version():
+    import subprocess
+    try:
+        version = subprocess.check_output(["pip", -"V"]).split(" ")[1].split(".")
+    except:
+        # For some reason, we have a wrong output. We simulate an old version of pip here
+        return False
+        
+    return version >= ("8", "0", "0")
+
+   
 def find_appengine():
     try:
         import dev_appserver
@@ -194,9 +205,9 @@ class BundlePackages(FabengineTask):
             if not os.path.exists(package_dir):
                 os.makedirs(package_dir)
 
-            local("pip wheel --use-wheel -w %(dest)s -f %(dest)s --download-cache %(cache)s -r %(req)s " % {
+            local("pip wheel --use-wheel -w %(dest)s %(cacheflag)s -f %(dest)s -r %(req)s " % {
                 'dest': package_dir,
-                'cache': temp,
+ 				'cacheflag': '--download-cache temp' if new_pip_version() else None,
                 'req': requirements,
             })
 
